@@ -1,11 +1,21 @@
 - hosts: all
   become: true
-  tasks: 
-     # - name: delete old deployment
-     #   command: kubectl delete -f /home/ubuntu/Deployment.yml
-     # - name: delete old service
-     #   command: kubectl delete -f /home/ubuntu/Service.yml
-     - name: create new deployment
-       command: kubectl apply -f /home/ubuntu/Deployment.yml --validate=false
-     - name: create new service
-       command: kubectl apply -f /home/ubuntu/Service.yml --validate=false
+  tasks:
+    # Optional: Delete the old deployment and service if needed (uncomment if necessary)
+    # - name: delete old deployment
+    #   command: kubectl delete -f /home/ubuntu/Deployment.yml
+
+    # - name: delete old service
+    #   command: kubectl delete -f /home/ubuntu/Service.yml
+
+    - name: create new deployment
+      shell: kubectl apply -f /home/ubuntu/Deployment.yml --validate=false
+      register: deployment_result
+      failed_when: "'error' in deployment_result.stderr"
+      changed_when: "'error' not in deployment_result.stderr"
+
+    - name: create new service
+      shell: kubectl apply -f /home/ubuntu/Service.yml --validate=false
+      register: service_result
+      failed_when: "'error' in service_result.stderr"
+      changed_when: "'error' not in service_result.stderr"
