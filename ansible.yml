@@ -8,14 +8,12 @@
     # - name: delete old service
     #   command: kubectl delete -f /home/ubuntu/Service.yml
 
-    - name: create new deployment
-      shell: kubectl apply -f /home/ubuntu/Deployment.yml --validate=false
-      register: deployment_result
-      failed_when: "'error' in deployment_result.stderr"
-      changed_when: "'error' not in deployment_result.stderr"
+    - name: Apply Kubernetes deployment from Deployment.yml
+      command: kubectl apply -f /home/ubuntu/Deployment.yml
+      environment:
+        KUBECONFIG: "/home/ubuntu/.kube/config"
 
-    - name: create new service
-      shell: kubectl apply -f /home/ubuntu/Service.yml --validate=false
-      register: service_result
-      failed_when: "'error' in service_result.stderr"
-      changed_when: "'error' not in service_result.stderr"
+   - name: Apply Kubernetes deployment from Service.yml
+      command: kubectl apply -f /home/ubuntu/Service.yml
+      environment:
+        KUBECONFIG: "/home/ubuntu/.kube/config"
