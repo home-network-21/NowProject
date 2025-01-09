@@ -1,20 +1,19 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-   name: mrdevops
+  name: myapp-deployment
 spec:
-   replicas: 2
-   selector:      # tells the controller which pods to watch/belong to
+  replicas: 1
+  selector:
     matchLabels:
-     app: mrdevops
-   template:
-      metadata:
-        labels:
-          app: mrdevops
-      spec:
-       containers:
-        - name: mrdevops
-          image: abouttime1021/myapp:latest
-          imagePullPolicy: Always
-          ports:
-          - containerPort: 80
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: abouttime1021/myapp:latest  # Replace with your image
+        ports:
+        - containerPort: 80
